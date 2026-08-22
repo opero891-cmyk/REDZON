@@ -1,0 +1,42 @@
+02:21:34.621703 exec-cmd.c:266          trace: resolved executable dir: C:/Program Files/Git/mingw64/bin
+02:21:34.722196 git.c:502               trace: built-in: git push origin main -v
+02:21:34.786910 run-command.c:674       trace: run_command: GIT_DIR=.git git remote-https origin https://github.com/opero891-cmyk/REDZON
+02:21:34.839260 run-command.c:946       trace: start_command: git remote-https origin https://github.com/opero891-cmyk/REDZON
+02:21:35.141342 exec-cmd.c:266          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+02:21:35.295346 git.c:812               trace: exec: git-remote-https origin https://github.com/opero891-cmyk/REDZON
+02:21:35.295346 run-command.c:674       trace: run_command: git-remote-https origin https://github.com/opero891-cmyk/REDZON
+02:21:35.295346 run-command.c:946       trace: start_command: git-remote-https origin https://github.com/opero891-cmyk/REDZON
+02:21:35.844947 exec-cmd.c:266          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+Pushing to https://github.com/opero891-cmyk/REDZON
+02:21:36.470529 run-command.c:674       trace: run_command: 'git credential-manager get'
+02:21:36.470529 run-command.c:946       trace: start_command: 'C:/Program Files/Git/usr/bin/sh.exe' -c 'git credential-manager get' 'git credential-manager get'
+02:21:36.867923 exec-cmd.c:266          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+02:21:36.904080 git.c:812               trace: exec: git-credential-manager get
+02:21:36.904080 run-command.c:674       trace: run_command: git-credential-manager get
+02:21:36.904080 run-command.c:946       trace: start_command: git-credential-manager get
+02:21:37.596538 exec-cmd.c:266          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+02:21:37.627787 git.c:502               trace: built-in: git version
+02:21:37.627787 trace.c:416             performance: 0.002651000 s: git command: 'C:/Program Files/Git/mingw64/libexec/git-core\git.exe' version
+02:21:37.721535 exec-cmd.c:266          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+02:21:37.987155 git.c:502               trace: built-in: git config list --show-scope -z --no-type
+02:21:37.987155 trace.c:416             performance: 0.008014900 s: git command: 'C:/Program Files/Git/mingw64/libexec/git-core\git.exe' config list --show-scope -z --no-type
+02:21:38.534012 trace.c:416             performance: 1.636227200 s: git command: 'C:\Program Files\Git\mingw64\libexec\git-core\git.exe' credential-manager get
+02:21:38.924663 run-command.c:674       trace: run_command: 'git credential-manager store'
+02:21:39.127749 run-command.c:946       trace: start_command: 'C:/Program Files/Git/usr/bin/sh.exe' -c 'git credential-manager store' 'git credential-manager store'
+02:21:39.413103 exec-cmd.c:266          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+02:21:39.442309 git.c:812               trace: exec: git-credential-manager store
+02:21:39.442922 run-command.c:674       trace: run_command: git-credential-manager store
+02:21:39.443466 run-command.c:946       trace: start_command: git-credential-manager store
+02:21:40.057073 exec-cmd.c:266          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+02:21:40.072693 git.c:502               trace: built-in: git version
+02:21:40.088317 trace.c:416             performance: 0.011523100 s: git command: 'C:/Program Files/Git/mingw64/libexec/git-core\git.exe' version
+02:21:40.135194 exec-cmd.c:266          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+02:21:40.166440 git.c:502               trace: built-in: git config list --show-scope -z --no-type
+02:21:40.166440 trace.c:416             performance: 0.004403500 s: git command: 'C:/Program Files/Git/mingw64/libexec/git-core\git.exe' config list --show-scope -z --no-type
+02:21:40.795758 trace.c:416             performance: 1.364243800 s: git command: 'C:\Program Files\Git\mingw64\libexec\git-core\git.exe' credential-manager store
+To https://github.com/opero891-cmyk/REDZON
+ = [up to date]      main -> main
+updating local tracking ref 'refs/remotes/origin/main'
+Everything up-to-date
+02:21:40.827011 trace.c:416             performance: 5.544854200 s: git command: git remote-https origin https://github.com/opero891-cmyk/REDZON
+02:21:40.842630 trace.c:416             performance: 6.129162300 s: git command: git.exe push origin main -v

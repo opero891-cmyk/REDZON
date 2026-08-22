@@ -1,0 +1,55 @@
+﻿2026-08-23 02:21:22 : ========== Starting Git Push ==========
+2026-08-23 02:21:22 : Repository: C:\Users\NCC-2026\Desktop\Android
+2026-08-23 02:21:22 : 
+2026-08-23 02:21:22 : Checking Git Status...
+2026-08-23 02:21:22 : Uncommitted changes found:
+2026-08-23 02:21:22 : ?? GITHUB_PUSH_INSTRUCTIONS.md ?? GIT_STATUS_REPORT.md ?? PROJECT_COMPLETION_REPORT.md ?? check_git.bat ?? push.log ?? push_result.txt ?? push_script.ps1
+2026-08-23 02:21:22 : 
+2026-08-23 02:21:22 : Current branch:
+2026-08-23 02:21:22 : main
+2026-08-23 02:21:22 : 
+2026-08-23 02:21:22 : Latest commits:
+2026-08-23 02:21:23 : 960f8bc ╪د┘╪ح╪╡╪»╪د╪▒ ╪د┘╪ث┘ê┘ - ╪ز╪╖╪ذ┘è┘é REDZON ╪د┘┘â╪د┘à┘
+2026-08-23 02:21:23 : 
+2026-08-23 02:21:23 : Attempting to push to GitHub...
+2026-08-23 02:21:29 : Push command executed.
+2026-08-23 02:21:29 : Push output:
+2026-08-23 02:21:29 : 02:21:23.105662 exec-cmd.c:266          trace: resolved executable dir: C:/Program Files/Git/mingw64/bin
+2026-08-23 02:21:29 : 02:21:23.138097 git.c:502               trace: built-in: git push origin main -v
+2026-08-23 02:21:29 : 02:21:23.138097 run-command.c:674       trace: run_command: GIT_DIR=.git git remote-https origin https://github.com/opero891-cmyk/REDZON
+2026-08-23 02:21:29 : 02:21:23.138097 run-command.c:946       trace: start_command: git remote-https origin https://github.com/opero891-cmyk/REDZON
+2026-08-23 02:21:29 : 02:21:23.187578 exec-cmd.c:266          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+2026-08-23 02:21:29 : 02:21:23.222149 git.c:812               trace: exec: git-remote-https origin https://github.com/opero891-cmyk/REDZON
+2026-08-23 02:21:29 : 02:21:23.222149 run-command.c:674       trace: run_command: git-remote-https origin https://github.com/opero891-cmyk/REDZON
+2026-08-23 02:21:29 : 02:21:23.222149 run-command.c:946       trace: start_command: git-remote-https origin https://github.com/opero891-cmyk/REDZON
+2026-08-23 02:21:29 : 02:21:23.278377 exec-cmd.c:266          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+2026-08-23 02:21:29 : Pushing to https://github.com/opero891-cmyk/REDZON
+2026-08-23 02:21:29 : 02:21:24.618869 run-command.c:674       trace: run_command: 'git credential-manager get'
+2026-08-23 02:21:29 : 02:21:24.618869 run-command.c:946       trace: start_command: 'C:/Program Files/Git/usr/bin/sh.exe' -c 'git credential-manager get' 'git credential-manager get'
+2026-08-23 02:21:29 : 02:21:25.289206 exec-cmd.c:266          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+2026-08-23 02:21:29 : 02:21:25.335127 git.c:812               trace: exec: git-credential-manager get
+2026-08-23 02:21:29 : 02:21:25.335127 run-command.c:674       trace: run_command: git-credential-manager get
+2026-08-23 02:21:29 : 02:21:25.335127 run-command.c:946       trace: start_command: git-credential-manager get
+2026-08-23 02:21:29 : 02:21:25.843645 exec-cmd.c:266          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+2026-08-23 02:21:29 : 02:21:25.877633 git.c:502               trace: built-in: git version
+2026-08-23 02:21:29 : 02:21:26.028613 exec-cmd.c:266          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+2026-08-23 02:21:29 : 02:21:26.055924 git.c:502               trace: built-in: git config list --show-scope -z --no-type
+2026-08-23 02:21:29 : 02:21:27.558744 run-command.c:674       trace: run_command: 'git credential-manager store'
+2026-08-23 02:21:29 : 02:21:27.558744 run-command.c:946       trace: start_command: 'C:/Program Files/Git/usr/bin/sh.exe' -c 'git credential-manager store' 'git credential-manager store'
+2026-08-23 02:21:29 : 02:21:27.830386 exec-cmd.c:266          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+2026-08-23 02:21:29 : 02:21:27.866130 git.c:812               trace: exec: git-credential-manager store
+2026-08-23 02:21:29 : 02:21:27.866130 run-command.c:674       trace: run_command: git-credential-manager store
+2026-08-23 02:21:29 : 02:21:27.866130 run-command.c:946       trace: start_command: git-credential-manager store
+2026-08-23 02:21:29 : 02:21:28.287853 exec-cmd.c:266          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+2026-08-23 02:21:29 : 02:21:28.316537 git.c:502               trace: built-in: git version
+2026-08-23 02:21:29 : 02:21:28.392126 exec-cmd.c:266          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+2026-08-23 02:21:29 : 02:21:28.418573 git.c:502               trace: built-in: git config list --show-scope -z --no-type
+2026-08-23 02:21:29 : To https://github.com/opero891-cmyk/REDZON
+2026-08-23 02:21:29 :  = [up to date]      main -> main
+2026-08-23 02:21:29 : updating local tracking ref 'refs/remotes/origin/main'
+2026-08-23 02:21:29 : Everything up-to-date
+2026-08-23 02:21:29 : 
+2026-08-23 02:21:29 : Checking remote tracking branches...
+2026-08-23 02:21:29 :   origin/main
+2026-08-23 02:21:29 : 
+2026-08-23 02:21:29 : ========== Push Script Completed ==========
