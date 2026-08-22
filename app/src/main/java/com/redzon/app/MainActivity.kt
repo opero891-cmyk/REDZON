@@ -23,7 +23,7 @@ import androidx.compose.material.icons.filled.Memory
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material.icons.filled.Thermostat
-import androidx.compose.material.icons.filled.Videogame
+import androidx.compose.material.icons.filled.VideogameAsset
 import androidx.compose.material.icons.filled.Restore
 import androidx.compose.material.icons.filled.TrendingUp
 import androidx.compose.material3.Button
@@ -246,7 +246,7 @@ private fun RedzonApp(context: Context) {
                                 actionStatus = "تم تحسين CPU"
                             }
 
-                            SettingToggle("تحسين GPU (قفل التردد الأقصى)", Icons.Default.Videogame, rootReady) {
+                            SettingToggle("تحسين GPU (قفل التردد الأقصى)", Icons.Default.VideogameAsset, rootReady) {
                                 actionStatus = "جاري تحسين GPU..."
                                 withContext(Dispatchers.IO) { RootCommand.lockGPUFrequency() }
                                 actionStatus = "تم تحسين GPU"
