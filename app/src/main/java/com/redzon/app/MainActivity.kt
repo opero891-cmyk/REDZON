@@ -103,32 +103,18 @@ private fun RedzonApp(context: Context) {
                     .padding(horizontal = 20.dp, vertical = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
-                // Header
                 item {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Column(modifier = Modifier.weight(1f)) {
-                            Text(
-                                "REDZON",
-                                color = Cyan,
-                                fontSize = 36.sp,
-                                fontWeight = FontWeight.Black
-                            )
-                            Text(
-                                "تحسين الأداء المتطور",
-                                color = Muted,
-                                fontSize = 13.sp
-                            )
+                            Text("REDZON", color = Cyan, fontSize = 36.sp, fontWeight = FontWeight.Black)
+                            Text("تحسين الأداء المتطور", color = Muted, fontSize = 13.sp)
                         }
                         StatusPill(rootStatus, rootReady)
                     }
                 }
 
-                // System Metrics Card
                 item {
-                    Card(
-                        colors = CardDefaults.cardColors(containerColor = Panel),
-                        shape = RoundedCornerShape(16.dp)
-                    ) {
+                    Card(colors = CardDefaults.cardColors(containerColor = Panel), shape = RoundedCornerShape(16.dp)) {
                         Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                             Text("المراقبة المباشرة", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
                             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -145,12 +131,8 @@ private fun RedzonApp(context: Context) {
                     }
                 }
 
-                // FPS Lock Section
                 item {
-                    Card(
-                        colors = CardDefaults.cardColors(containerColor = Panel),
-                        shape = RoundedCornerShape(16.dp)
-                    ) {
+                    Card(colors = CardDefaults.cardColors(containerColor = Panel), shape = RoundedCornerShape(16.dp)) {
                         Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Icon(Icons.Default.Speed, contentDescription = null, tint = Cyan, modifier = Modifier.size(24.dp))
@@ -162,30 +144,22 @@ private fun RedzonApp(context: Context) {
                             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                 FPSButton("30", 30, rootReady) { fps ->
                                     actionStatus = "جاري تطبيق $fps FPS..."
-                                    withContext(Dispatchers.IO) {
-                                        RootCommand.lockFPS(fps)
-                                    }
+                                    withContext(Dispatchers.IO) { RootCommand.lockFPS(fps) }
                                     actionStatus = "تم تطبيق $fps FPS بنجاح"
                                 }
                                 FPSButton("60", 60, rootReady) { fps ->
                                     actionStatus = "جاري تطبيق $fps FPS..."
-                                    withContext(Dispatchers.IO) {
-                                        RootCommand.lockFPS(fps)
-                                    }
+                                    withContext(Dispatchers.IO) { RootCommand.lockFPS(fps) }
                                     actionStatus = "تم تطبيق $fps FPS بنجاح"
                                 }
                                 FPSButton("90", 90, rootReady) { fps ->
                                     actionStatus = "جاري تطبيق $fps FPS..."
-                                    withContext(Dispatchers.IO) {
-                                        RootCommand.lockFPS(fps)
-                                    }
+                                    withContext(Dispatchers.IO) { RootCommand.lockFPS(fps) }
                                     actionStatus = "تم تطبيق $fps FPS بنجاح"
                                 }
                                 FPSButton("120", 120, rootReady) { fps ->
                                     actionStatus = "جاري تطبيق $fps FPS..."
-                                    withContext(Dispatchers.IO) {
-                                        RootCommand.lockFPS(fps)
-                                    }
+                                    withContext(Dispatchers.IO) { RootCommand.lockFPS(fps) }
                                     actionStatus = "تم تطبيق $fps FPS بنجاح"
                                 }
                             }
@@ -193,34 +167,25 @@ private fun RedzonApp(context: Context) {
                     }
                 }
 
-                // Performance Modes
                 item {
-                    Card(
-                        colors = CardDefaults.cardColors(containerColor = Panel),
-                        shape = RoundedCornerShape(16.dp)
-                    ) {
+                    Card(colors = CardDefaults.cardColors(containerColor = Panel), shape = RoundedCornerShape(16.dp)) {
                         Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Icon(Icons.Default.TrendingUp, contentDescription = null, tint = Amber, modifier = Modifier.size(24.dp))
                                 Text("أوضاع الأداء", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 14.sp, modifier = Modifier.padding(start = 12.dp))
                             }
-                            
+
                             Button(
                                 onClick = {
                                     actionStatus = "جاري تطبيق الوضع المتوازن..."
                                     currentMode = "balanced"
-                                    withContext(Dispatchers.IO) {
-                                        RootCommand.balancedMode()
-                                    }
+                                    withContext(Dispatchers.IO) { RootCommand.balancedMode() }
                                     actionStatus = "تم تطبيق الوضع المتوازن"
                                 },
                                 enabled = rootReady,
                                 modifier = Modifier.fillMaxWidth().height(45.dp),
                                 shape = RoundedCornerShape(10.dp),
-                                colors = ButtonDefaults.buttonColors(
-                                    containerColor = if (currentMode == "balanced") Cyan else Panel,
-                                    contentColor = if (currentMode == "balanced") Ink else Color.White
-                                )
+                                colors = ButtonDefaults.buttonColors(containerColor = if (currentMode == "balanced") Cyan else Panel, contentColor = if (currentMode == "balanced") Ink else Color.White)
                             ) {
                                 Text("الوضع المتوازن (90 FPS)", fontWeight = FontWeight.Bold, fontSize = 12.sp)
                             }
@@ -229,18 +194,13 @@ private fun RedzonApp(context: Context) {
                                 onClick = {
                                     actionStatus = "جاري تطبيق الأداء الأقصى..."
                                     currentMode = "extreme"
-                                    withContext(Dispatchers.IO) {
-                                        RootCommand.extremePerformanceMode()
-                                    }
+                                    withContext(Dispatchers.IO) { RootCommand.extremePerformanceMode() }
                                     actionStatus = "تم تطبيق الأداء الأقصى"
                                 },
                                 enabled = rootReady,
                                 modifier = Modifier.fillMaxWidth().height(45.dp),
                                 shape = RoundedCornerShape(10.dp),
-                                colors = ButtonDefaults.buttonColors(
-                                    containerColor = if (currentMode == "extreme") Red else Panel,
-                                    contentColor = if (currentMode == "extreme") Color.White else Color.White
-                                )
+                                colors = ButtonDefaults.buttonColors(containerColor = if (currentMode == "extreme") Red else Panel, contentColor = Color.White)
                             ) {
                                 Text("أداء أقصى (120 FPS + قفل CPU/GPU)", fontWeight = FontWeight.Bold, fontSize = 12.sp)
                             }
@@ -249,9 +209,7 @@ private fun RedzonApp(context: Context) {
                                 onClick = {
                                     actionStatus = "جاري إعادة تعيين الإعدادات..."
                                     currentMode = "normal"
-                                    withContext(Dispatchers.IO) {
-                                        RootCommand.resetToDefaults()
-                                    }
+                                    withContext(Dispatchers.IO) { RootCommand.resetToDefaults() }
                                     actionStatus = "تمت إعادة تعيين الإعدادات الافتراضية"
                                 },
                                 enabled = rootReady,
@@ -265,104 +223,57 @@ private fun RedzonApp(context: Context) {
                     }
                 }
 
-                // Advanced Settings
                 item {
-                    Card(
-                        colors = CardDefaults.cardColors(containerColor = Panel),
-                        shape = RoundedCornerShape(16.dp)
-                    ) {
+                    Card(colors = CardDefaults.cardColors(containerColor = Panel), shape = RoundedCornerShape(16.dp)) {
                         Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Icon(Icons.Default.Settings, contentDescription = null, tint = Amber, modifier = Modifier.size(24.dp))
                                 Text("الإعدادات المتقدمة", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 14.sp, modifier = Modifier.padding(start = 12.dp))
                             }
 
-                            SettingToggle(
-                                label = "تحسين CPU (وضع الأداء القصوى)",
-                                icon = Icons.Default.Memory,
-                                enabled = rootReady,
-                                onClick = {
-                                    actionStatus = "جاري تحسين CPU..."
-                                    withContext(Dispatchers.IO) {
-                                        RootCommand.setCPUPerformance()
-                                    }
-                                    actionStatus = "تم تحسين CPU"
-                                }
-                            )
+                            SettingToggle("تحسين CPU (وضع الأداء القصوى)", Icons.Default.Memory, rootReady) {
+                                actionStatus = "جاري تحسين CPU..."
+                                withContext(Dispatchers.IO) { RootCommand.setCPUPerformance() }
+                                actionStatus = "تم تحسين CPU"
+                            }
 
-                            SettingToggle(
-                                label = "تحسين GPU (قفل التردد الأقصى)",
-                                icon = Icons.Default.Videogame,
-                                enabled = rootReady,
-                                onClick = {
-                                    actionStatus = "جاري تحسين GPU..."
-                                    withContext(Dispatchers.IO) {
-                                        RootCommand.lockGPUFrequency()
-                                    }
-                                    actionStatus = "تم تحسين GPU"
-                                }
-                            )
+                            SettingToggle("تحسين GPU (قفل التردد الأقصى)", Icons.Default.Videogame, rootReady) {
+                                actionStatus = "جاري تحسين GPU..."
+                                withContext(Dispatchers.IO) { RootCommand.lockGPUFrequency() }
+                                actionStatus = "تم تحسين GPU"
+                            }
 
-                            SettingToggle(
-                                label = "تحسين الذاكرة RAM",
-                                icon = Icons.Default.Memory,
-                                enabled = rootReady,
-                                onClick = {
-                                    actionStatus = "جاري تحسين RAM..."
-                                    withContext(Dispatchers.IO) {
-                                        RootCommand.optimizeRAM()
-                                    }
-                                    actionStatus = "تم تحسين RAM"
-                                }
-                            )
+                            SettingToggle("تحسين الذاكرة RAM", Icons.Default.Memory, rootReady) {
+                                actionStatus = "جاري تحسين RAM..."
+                                withContext(Dispatchers.IO) { RootCommand.optimizeRAM() }
+                                actionStatus = "تم تحسين RAM"
+                            }
 
-                            SettingToggle(
-                                label = if (thermaling) "تعطيل كبح الحرارة" else "تفعيل كبح الحرارة",
-                                icon = Icons.Default.Thermostat,
-                                enabled = rootReady,
-                                onClick = {
-                                    actionStatus = if (thermaling) "جاري تعطيل كبح الحرارة..." else "جاري تفعيل كبح الحرارة..."
-                                    thermaling = !thermaling
-                                    withContext(Dispatchers.IO) {
-                                        if (thermaling) {
-                                            RootCommand.disableThermalThrottling()
-                                            "تم تعطيل كبح الحرارة - ستحصل على أداء أفضل لكن قد ترتفع الحرارة"
-                                        } else {
-                                            RootCommand.enableThermalThrottling()
-                                            "تم تفعيل كبح الحرارة - الحماية من الحرارة الزائدة"
-                                        }
+                            SettingToggle(if (thermaling) "تعطيل كبح الحرارة" else "تفعيل كبح الحرارة", Icons.Default.Thermostat, rootReady) {
+                                actionStatus = if (thermaling) "جاري تعطيل كبح الحرارة..." else "جاري تفعيل كبح الحرارة..."
+                                val disableThermal = thermaling
+                                thermaling = !thermaling
+                                withContext(Dispatchers.IO) {
+                                    if (disableThermal) {
+                                        RootCommand.disableThermalThrottling()
+                                    } else {
+                                        RootCommand.enableThermalThrottling()
                                     }
-                                    actionStatus = if (thermaling) "تم تعطيل كبح الحرارة" else "تم تفعيل كبح الحرارة"
                                 }
-                            )
+                                actionStatus = if (disableThermal) "تم تعطيل كبح الحرارة" else "تم تفعيل كبح الحرارة"
+                            }
 
-                            SettingToggle(
-                                label = "تحسين I/O (سرعة قراءة البيانات)",
-                                icon = Icons.Default.Speed,
-                                enabled = rootReady,
-                                onClick = {
-                                    actionStatus = "جاري تحسين I/O..."
-                                    withContext(Dispatchers.IO) {
-                                        RootCommand.optimizeIO()
-                                    }
-                                    actionStatus = "تم تحسين I/O"
-                                }
-                            )
+                            SettingToggle("تحسين I/O (سرعة قراءة البيانات)", Icons.Default.Speed, rootReady) {
+                                actionStatus = "جاري تحسين I/O..."
+                                withContext(Dispatchers.IO) { RootCommand.optimizeIO() }
+                                actionStatus = "تم تحسين I/O"
+                            }
                         }
                     }
                 }
 
-                // Footer
                 item {
-                    Text(
-                        "REDZON v1.0  •  ${if (rootReady) "ROOT MODE" else "LIMITED MODE"}",
-                        color = Muted,
-                        fontSize = 10.sp,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 16.dp)
-                    )
+                    Text("REDZON v1.0  •  ${if (rootReady) "ROOT MODE" else "LIMITED MODE"}", color = Muted, fontSize = 10.sp, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp))
                 }
             }
         }
@@ -401,11 +312,7 @@ private fun MetricSmall(label: String, value: String, accent: Color, modifier: M
 @Composable
 private fun FPSButton(label: String, fps: Int, enabled: Boolean, onClick: suspend (Int) -> Unit) {
     Button(
-        onClick = {
-            withContext(Dispatchers.IO) {
-                onClick(fps)
-            }
-        },
+        onClick = { withContext(Dispatchers.IO) { onClick(fps) } },
         enabled = enabled,
         modifier = Modifier.height(40.dp),
         shape = RoundedCornerShape(8.dp),
@@ -416,24 +323,18 @@ private fun FPSButton(label: String, fps: Int, enabled: Boolean, onClick: suspen
 }
 
 @Composable
-private fun SettingToggle(label: String, icon: androidx.compose.material.icons.outlined.Menu?, enabled: Boolean, onClick: suspend () -> Unit) {
+private fun SettingToggle(label: String, icon: androidx.compose.ui.graphics.vector.ImageVector, enabled: Boolean, onClick: suspend () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .background(Cyan.copy(alpha = 0.05f), RoundedCornerShape(10.dp))
-            .clickable(enabled = enabled) {
-                withContext(Dispatchers.IO) {
-                    onClick()
-                }
-            }
+            .clickable(enabled = enabled) { withContext(Dispatchers.IO) { onClick() } }
             .padding(12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(Icons.Default.Memory, contentDescription = null, tint = if (enabled) Cyan else Muted, modifier = Modifier.size(20.dp))
+        Icon(icon, contentDescription = null, tint = if (enabled) Cyan else Muted, modifier = Modifier.size(20.dp))
         Text(label, color = if (enabled) Color.White else Muted, fontSize = 12.sp, fontWeight = FontWeight.Medium, modifier = Modifier.padding(start = 12.dp).weight(1f))
-        Box(modifier = Modifier
-            .size(20.dp)
-            .background(if (enabled) Cyan else Muted, RoundedCornerShape(4.dp))) {
+        Box(modifier = Modifier.size(20.dp).background(if (enabled) Cyan else Muted, RoundedCornerShape(4.dp))) {
             Text(">", color = Ink, fontSize = 14.sp, fontWeight = FontWeight.Bold, modifier = Modifier.align(Alignment.Center))
         }
     }
