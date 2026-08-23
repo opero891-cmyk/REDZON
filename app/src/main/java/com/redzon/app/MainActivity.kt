@@ -23,7 +23,7 @@ import androidx.compose.material.icons.filled.Memory
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material.icons.filled.Thermostat
-import androidx.compose.material.icons.filled.Videogame
+import androidx.compose.material.icons.filled.VideogameAsset
 import androidx.compose.material.icons.filled.Restore
 import androidx.compose.material.icons.filled.TrendingUp
 import androidx.compose.material3.Button
@@ -50,7 +50,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import androidx.compose.runtime.rememberCoroutineScope
 import java.util.Locale
 
 private val Ink = Color(0xFF09111D)
@@ -77,6 +79,7 @@ private fun RedzonApp(context: Context) {
     var actionStatus by remember { mutableStateOf("جاهز") }
     var thermaling by remember { mutableStateOf(true) }
     var cpuPrevious by remember { mutableStateOf(SystemMonitor.readCpuStats()) }
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
         val hasRoot = withContext(Dispatchers.IO) {
@@ -177,10 +180,12 @@ private fun RedzonApp(context: Context) {
 
                             Button(
                                 onClick = {
-                                    actionStatus = "جاري تطبيق الوضع المتوازن..."
-                                    currentMode = "balanced"
-                                    withContext(Dispatchers.IO) { RootCommand.balancedMode() }
-                                    actionStatus = "تم تطبيق الوضع المتوازن"
+                                    scope.launch {
+                                        actionStatus = "جاري تطبيق الوضع المتوازن..."
+                                        currentMode = "balanced"
+                                        withContext(Dispatchers.IO) { RootCommand.balancedMode() }
+                                        actionStatus = "تم تطبيق الوضع المتوازن"
+                                    }
                                 },
                                 enabled = rootReady,
                                 modifier = Modifier.fillMaxWidth().height(45.dp),
@@ -192,10 +197,12 @@ private fun RedzonApp(context: Context) {
 
                             Button(
                                 onClick = {
-                                    actionStatus = "جاري تطبيق الأداء الأقصى..."
-                                    currentMode = "extreme"
-                                    withContext(Dispatchers.IO) { RootCommand.extremePerformanceMode() }
-                                    actionStatus = "تم تطبيق الأداء الأقصى"
+                                    scope.launch {
+                                        actionStatus = "جاري تطبيق الأداء الأقصى..."
+                                        currentMode = "extreme"
+                                        withContext(Dispatchers.IO) { RootCommand.extremePerformanceMode() }
+                                        actionStatus = "تم تطبيق الأداء الأقصى"
+                                    }
                                 },
                                 enabled = rootReady,
                                 modifier = Modifier.fillMaxWidth().height(45.dp),
@@ -207,10 +214,12 @@ private fun RedzonApp(context: Context) {
 
                             OutlinedButton(
                                 onClick = {
-                                    actionStatus = "جاري إعادة تعيين الإعدادات..."
-                                    currentMode = "normal"
-                                    withContext(Dispatchers.IO) { RootCommand.resetToDefaults() }
-                                    actionStatus = "تمت إعادة تعيين الإعدادات الافتراضية"
+                                    scope.launch {
+                                        actionStatus = "جاري إعادة تعيين الإعدادات..."
+                                        currentMode = "normal"
+                                        withContext(Dispatchers.IO) { RootCommand.resetToDefaults() }
+                                        actionStatus = "تمت إعادة تعيين الإعدادات الافتراضية"
+                                    }
                                 },
                                 enabled = rootReady,
                                 modifier = Modifier.fillMaxWidth().height(45.dp),
@@ -237,7 +246,7 @@ private fun RedzonApp(context: Context) {
                                 actionStatus = "تم تحسين CPU"
                             }
 
-                            SettingToggle("تحسين GPU (قفل التردد الأقصى)", Icons.Default.Videogame, rootReady) {
+                            SettingToggle("تحسين GPU (قفل التردد الأقصى)", Icons.Default.VideogameAsset, rootReady) {
                                 actionStatus = "جاري تحسين GPU..."
                                 withContext(Dispatchers.IO) { RootCommand.lockGPUFrequency() }
                                 actionStatus = "تم تحسين GPU"
@@ -311,8 +320,9 @@ private fun MetricSmall(label: String, value: String, accent: Color, modifier: M
 
 @Composable
 private fun FPSButton(label: String, fps: Int, enabled: Boolean, onClick: suspend (Int) -> Unit) {
+    val scope = rememberCoroutineScope()
     Button(
-        onClick = { withContext(Dispatchers.IO) { onClick(fps) } },
+        onClick = { scope.launch { onClick(fps) } },
         enabled = enabled,
         modifier = Modifier.height(40.dp),
         shape = RoundedCornerShape(8.dp),
@@ -324,11 +334,12 @@ private fun FPSButton(label: String, fps: Int, enabled: Boolean, onClick: suspen
 
 @Composable
 private fun SettingToggle(label: String, icon: androidx.compose.ui.graphics.vector.ImageVector, enabled: Boolean, onClick: suspend () -> Unit) {
+    val scope = rememberCoroutineScope()
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .background(Cyan.copy(alpha = 0.05f), RoundedCornerShape(10.dp))
-            .clickable(enabled = enabled) { withContext(Dispatchers.IO) { onClick() } }
+            .clickable(enabled = enabled) { scope.launch { onClick() } }
             .padding(12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
