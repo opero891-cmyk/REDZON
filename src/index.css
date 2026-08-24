@@ -7,7 +7,16 @@
     font-family: 'IBM Plex Sans Arabic', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     background-color: #09111D;
     color: #F1F5F9;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
   }
+}
+
+/* Allow text selection only in code, terminal, and specific text blocks */
+pre, code, input, textarea, .selectable-text {
+  user-select: text !important;
+  -webkit-user-select: text !important;
 }
 
 .font-cyber {

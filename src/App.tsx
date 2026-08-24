@@ -8,7 +8,6 @@ import { FPSController } from './components/FPSController';
 import { PerformanceModes } from './components/PerformanceModes';
 import { AdvancedSettings } from './components/AdvancedSettings';
 import { TerminalLogs } from './components/TerminalLogs';
-import { AppInstaller } from './components/AppInstaller';
 import { RootTester } from './components/RootTester';
 import { ShellCommandHub } from './components/ShellCommandHub';
 import { DeviceInfoModal } from './components/DeviceInfoModal';
@@ -181,9 +180,6 @@ export const App: React.FC = () => {
           actionStatus={actionStatus}
           language={language}
         />
-
-        {/* In-App Mobile Application Installer */}
-        <AppInstaller language={language} />
 
         {/* FPS Lock Controller */}
         <FPSController
