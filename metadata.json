@@ -1,0 +1,6 @@
+{
+  "name": "REDZON",
+  "description": "Android 64-bit Game Performance Optimizer and System Monitor dashboard with FPS lock, CPU/GPU governors, RAM optimization, and thermal throttling controls.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
