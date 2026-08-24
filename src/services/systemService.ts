@@ -351,6 +351,19 @@ export class RedzonSystemEngine {
     return { success: isSuccess, output: simulatedOutput };
   }
 
+  public shutdownDaemon() {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+      this.intervalId = null;
+    }
+    this.logCommand('killall redzon_daemon', 'Process redzon_daemon terminated. Telemetry stopped.', true);
+  }
+
+  public restartTelemetry() {
+    this.startTelemetry();
+    this.logCommand('redzon_daemon --start', 'Process redzon_daemon started. Telemetry active.', true);
+  }
+
   public destroy() {
     if (this.intervalId) clearInterval(this.intervalId);
   }

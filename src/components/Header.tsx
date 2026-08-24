@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldCheck, ShieldAlert, Cpu, Terminal, RefreshCw, Globe } from 'lucide-react';
+import { ShieldCheck, ShieldAlert, Cpu, Terminal, RefreshCw, Globe, Power } from 'lucide-react';
 
 interface HeaderProps {
   rootReady: boolean;
@@ -9,6 +9,7 @@ interface HeaderProps {
   onToggleTerminal: () => void;
   showTerminal: boolean;
   onRestartSplash: () => void;
+  onOpenShutdown: () => void;
   language: 'ar' | 'en';
   onToggleLanguage: () => void;
 }
@@ -21,6 +22,7 @@ export const Header: React.FC<HeaderProps> = ({
   onToggleTerminal,
   showTerminal,
   onRestartSplash,
+  onOpenShutdown,
   language,
   onToggleLanguage
 }) => {
@@ -108,6 +110,19 @@ export const Header: React.FC<HeaderProps> = ({
           title={language === 'ar' ? 'إعادة شاشة البداية' : 'Replay Splash Screen'}
         >
           <RefreshCw className="w-4 h-4" />
+        </button>
+
+        {/* Power Off App and All Engine Processes Button */}
+        <button
+          id="header-power-off-btn"
+          onClick={onOpenShutdown}
+          className="p-2 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 hover:text-red-300 border border-red-500/30 hover:border-red-500/60 transition-all shadow-md shadow-red-500/10 active:scale-95 flex items-center gap-1.5 px-3"
+          title={language === 'ar' ? 'إطفاء التطبيق وكل شيء' : 'Power off application and reset all'}
+        >
+          <Power className="w-4 h-4 text-red-400" />
+          <span className="text-xs font-bold font-mono hidden sm:inline">
+            {language === 'ar' ? 'إطفاء' : 'OFF'}
+          </span>
         </button>
       </div>
     </header>

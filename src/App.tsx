@@ -7,13 +7,17 @@ import { LiveMonitor } from './components/LiveMonitor';
 import { FPSController } from './components/FPSController';
 import { PerformanceModes } from './components/PerformanceModes';
 import { AdvancedSettings } from './components/AdvancedSettings';
+import { GameOptimizer } from './components/GameOptimizer';
 import { TerminalLogs } from './components/TerminalLogs';
 import { RootTester } from './components/RootTester';
 import { ShellCommandHub } from './components/ShellCommandHub';
 import { DeviceInfoModal } from './components/DeviceInfoModal';
+import { ShutdownModal, ShutdownScreen } from './components/ShutdownModal';
 
 export const App: React.FC = () => {
   const [showSplash, setShowSplash] = useState<boolean>(false);
+  const [isPoweredOff, setIsPoweredOff] = useState<boolean>(false);
+  const [showShutdownModal, setShowShutdownModal] = useState<boolean>(false);
   const [metrics, setMetrics] = useState<SystemMetrics>(systemEngine.getMetrics());
   const [commandLogs, setCommandLogs] = useState<CommandLog[]>(systemEngine.getCommandLogs());
   const [rootReady, setRootReady] = useState<boolean>(systemEngine.getRootState());
@@ -134,6 +138,16 @@ export const App: React.FC = () => {
     }
   };
 
+  const handleApplyGameProfile = async (game: any, generatedCommand: string) => {
+    setActionStatus(isArabic ? `جاري تطبيق بروفايل ${game.name}...` : `Applying ${game.nameEn} booster...`);
+    const res = await systemEngine.executeCustomCommand(generatedCommand);
+    if (res.success) {
+      setActionStatus(isArabic ? `تم تفعيل تحسينات ${game.name} بنجاح!` : `${game.nameEn} Boost Profile Active!`);
+    } else {
+      setActionStatus(isArabic ? `تم تجهيز إعدادات ${game.name}` : `${game.nameEn} Profile Prepared`);
+    }
+  };
+
   const toggleLanguage = () => {
     const nextLang = language === 'ar' ? 'en' : 'ar';
     setLanguage(nextLang);
@@ -145,6 +159,29 @@ export const App: React.FC = () => {
         : (nextLang === 'ar' ? 'محدود - بدون ROOT ✗' : 'Limited - Non-Root ✗')
     );
   };
+
+  const handleConfirmShutdown = () => {
+    systemEngine.shutdownDaemon();
+    setShowShutdownModal(false);
+    setIsPoweredOff(true);
+  };
+
+  const handleResetAllAndShutdown = async () => {
+    await systemEngine.resetToDefaults();
+    systemEngine.shutdownDaemon();
+    setShowShutdownModal(false);
+    setIsPoweredOff(true);
+  };
+
+  const handleRestartApp = () => {
+    systemEngine.restartTelemetry();
+    setIsPoweredOff(false);
+    setActionStatus(isArabic ? 'تمت إعادة تشغيل التطبيق بنجاح' : 'App restarted successfully');
+  };
+
+  if (isPoweredOff) {
+    return <ShutdownScreen onRestart={handleRestartApp} language={language} />;
+  }
 
   return (
     <div className={`min-h-screen bg-[#09111D] text-slate-100 font-sans ${isArabic ? 'dir-rtl' : 'dir-ltr'}`}>
@@ -170,6 +207,7 @@ export const App: React.FC = () => {
           onToggleTerminal={() => setShowTerminal((prev) => !prev)}
           showTerminal={showTerminal}
           onRestartSplash={() => setShowSplash(true)}
+          onOpenShutdown={() => setShowShutdownModal(true)}
           language={language}
           onToggleLanguage={toggleLanguage}
         />
@@ -179,6 +217,13 @@ export const App: React.FC = () => {
           metrics={metrics}
           actionStatus={actionStatus}
           language={language}
+        />
+
+        {/* Per-Game Optimization Engine (RedMagic Nova Tuned) */}
+        <GameOptimizer
+          language={language}
+          rootReady={rootReady}
+          onApplyGameProfile={handleApplyGameProfile}
         />
 
         {/* FPS Lock Controller */}
@@ -251,6 +296,16 @@ export const App: React.FC = () => {
         deviceInfo={initialDeviceInfo}
         rootReady={rootReady}
         language={language}
+      />
+
+      {/* Shutdown & Power Off Modal */}
+      <ShutdownModal
+        isOpen={showShutdownModal}
+        onClose={() => setShowShutdownModal(false)}
+        onConfirmShutdown={handleConfirmShutdown}
+        onResetAllAndShutdown={handleResetAllAndShutdown}
+        language={language}
+        rootReady={rootReady}
       />
     </div>
   );
