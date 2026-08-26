@@ -93,23 +93,23 @@ export const SHELL_COMMANDS: Record<string, ShellCommandDefinition> = {
   },
   GPU_LOCK_MAX: {
     id: 'GPU_LOCK_MAX',
-    name: 'قفل أقصى تردد لكرت الشاشة GPU',
-    nameEn: 'Lock Max GPU Frequency',
+    name: 'تثبيت تردد كرت الشاشة Adreno على أقصى قيمة (Performance Lock)',
+    nameEn: 'Lock Max Adreno GPU Frequency & Performance Governor',
     category: 'gpu',
-    command: 'if [ -d /sys/class/kgsl/kgsl-3d0/devfreq ]; then echo 825000000 > /sys/class/kgsl/kgsl-3d0/devfreq/min_freq && echo 825000000 > /sys/class/kgsl/kgsl-3d0/devfreq/max_freq; fi',
-    description: 'تثبيت تردد معالج الرسوميات Adreno على 825 MHz لمنع انخفاض الفريمات',
-    descriptionEn: 'Locks Qualcomm Adreno GPU devfreq to 825 MHz clock frequency',
-    sysfsTarget: '/sys/class/kgsl/kgsl-3d0/devfreq/min_freq & max_freq'
+    command: 'for gpu in /sys/class/kgsl/kgsl-3d0 /sys/devices/platform/soc/*.qcom,kgsl-3d0/kgsl/kgsl-3d0 /sys/class/devfreq/*gpu* /sys/class/devfreq/*kgsl*; do if [ -d "$gpu" ]; then [ -f "$gpu/devfreq/governor" ] && echo performance > "$gpu/devfreq/governor" 2>/dev/null || [ -f "$gpu/governor" ] && echo performance > "$gpu/governor" 2>/dev/null; [ -f "$gpu/force_clk_on" ] && echo 1 > "$gpu/force_clk_on" 2>/dev/null; [ -f "$gpu/force_bus_on" ] && echo 1 > "$gpu/force_bus_on" 2>/dev/null; [ -f "$gpu/force_rail_on" ] && echo 1 > "$gpu/force_rail_on" 2>/dev/null; [ -f "$gpu/force_no_nap" ] && echo 1 > "$gpu/force_no_nap" 2>/dev/null; if [ -f "$gpu/devfreq/available_frequencies" ]; then MAX_F=$(cat "$gpu/devfreq/available_frequencies" | tr " " "\\n" | sort -nr | head -n1); elif [ -f "$gpu/gpu_available_frequencies" ]; then MAX_F=$(cat "$gpu/gpu_available_frequencies" | tr " " "\\n" | sort -nr | head -n1); else MAX_F=825000000; fi; [ -n "$MAX_F" ] && ([ -f "$gpu/devfreq/max_freq" ] && echo $MAX_F > "$gpu/devfreq/max_freq" 2>/dev/null; [ -f "$gpu/devfreq/min_freq" ] && echo $MAX_F > "$gpu/devfreq/min_freq" 2>/dev/null; [ -f "$gpu/max_gpuclk" ] && echo $MAX_F > "$gpu/max_gpuclk" 2>/dev/null; [ -f "$gpu/min_clock" ] && echo $MAX_F > "$gpu/min_clock" 2>/dev/null); fi; done',
+    description: 'يقوم بالبحث عن مسارات كرت الشاشة Adreno (KGSL / Devfreq) وتغيير الـ governor إلى performance وتثبيت التردد الأدنى والأعلى على أقصى تردد مدعوم (Max Freq) لمنع هبوط الفريمات نهائياً أثناء اللعب.',
+    descriptionEn: 'Scans Adreno sysfs paths, switches GPU governor to performance, disables power gating, and locks min/max devfreq to the highest available clock frequency.',
+    sysfsTarget: '/sys/class/kgsl/kgsl-3d0/ (governor, min_freq, max_freq, force_clk_on)'
   },
   GPU_RESET: {
     id: 'GPU_RESET',
-    name: 'إعادة تعيين تردد GPU التلقائي',
-    nameEn: 'Reset GPU Frequency',
+    name: 'استعادة وضع GPU التلقائي (msm-adreno-tz)',
+    nameEn: 'Restore Stock GPU Governor (msm-adreno-tz)',
     category: 'gpu',
-    command: 'if [ -d /sys/class/kgsl/kgsl-3d0/devfreq ]; then echo 380000000 > /sys/class/kgsl/kgsl-3d0/devfreq/min_freq; fi',
-    description: 'إعادة أدنى تردد لكرت الشاشة إلى 380 MHz الافتراضي',
-    descriptionEn: 'Restores default minimum GPU frequency',
-    sysfsTarget: '/sys/class/kgsl/kgsl-3d0/devfreq/min_freq'
+    command: 'for gpu in /sys/class/kgsl/kgsl-3d0 /sys/devices/platform/soc/*.qcom,kgsl-3d0/kgsl/kgsl-3d0 /sys/class/devfreq/*gpu* /sys/class/devfreq/*kgsl*; do if [ -d "$gpu" ]; then [ -f "$gpu/devfreq/governor" ] && echo msm-adreno-tz > "$gpu/devfreq/governor" 2>/dev/null || [ -f "$gpu/governor" ] && echo simple_ondemand > "$gpu/governor" 2>/dev/null; [ -f "$gpu/force_clk_on" ] && echo 0 > "$gpu/force_clk_on" 2>/dev/null; [ -f "$gpu/force_bus_on" ] && echo 0 > "$gpu/force_bus_on" 2>/dev/null; [ -f "$gpu/force_rail_on" ] && echo 0 > "$gpu/force_rail_on" 2>/dev/null; [ -f "$gpu/force_no_nap" ] && echo 0 > "$gpu/force_no_nap" 2>/dev/null; if [ -f "$gpu/devfreq/available_frequencies" ]; then MIN_F=$(cat "$gpu/devfreq/available_frequencies" | tr " " "\\n" | sort -n | head -n1); else MIN_F=300000000; fi; [ -f "$gpu/devfreq/min_freq" ] && echo $MIN_F > "$gpu/devfreq/min_freq" 2>/dev/null; fi; done',
+    description: 'إعادة حاكم كرت الشاشة إلى msm-adreno-tz التلقائي لتقليل استهلاك البطارية والحرارة في الاستخدام العادي.',
+    descriptionEn: 'Restores default Qualcomm msm-adreno-tz GPU governor and enables dynamic power gating.',
+    sysfsTarget: '/sys/class/kgsl/kgsl-3d0/devfreq/governor'
   },
   RAM_DROP_CACHES: {
     id: 'RAM_DROP_CACHES',

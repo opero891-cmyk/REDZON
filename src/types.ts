@@ -33,7 +33,7 @@ export interface DeviceInfo {
   gpuRenderer: string;
   androidVersion: string;
   apiLevel: number;
-  rootMethod: 'Magisk v27.0' | 'KernelSU v0.9.5' | 'APatch v10.7' | 'None';
+  rootMethod: 'Scene Daemon IPC (uid=0 Local Socket)' | 'Magisk v27.0' | 'KernelSU v0.9.5' | 'APatch v10.7' | 'None';
   kernelVersion: string;
-  selinuxStatus: 'Permissive' | 'Enforcing';
+  selinuxStatus: 'Permissive' | 'Enforcing' | 'Enforcing (Allowed via Magisk Policy)';
 }

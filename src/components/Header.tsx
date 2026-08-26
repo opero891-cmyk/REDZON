@@ -1,11 +1,12 @@
 import React from 'react';
-import { ShieldCheck, ShieldAlert, Cpu, Terminal, RefreshCw, Globe, Power } from 'lucide-react';
+import { ShieldCheck, ShieldAlert, Cpu, Terminal, RefreshCw, Globe, Power, HelpCircle } from 'lucide-react';
 
 interface HeaderProps {
   rootReady: boolean;
   rootStatus: string;
   onToggleRoot: () => void;
   onOpenDeviceInfo: () => void;
+  onOpenInstructions: () => void;
   onToggleTerminal: () => void;
   showTerminal: boolean;
   onRestartSplash: () => void;
@@ -19,6 +20,7 @@ export const Header: React.FC<HeaderProps> = ({
   rootStatus,
   onToggleRoot,
   onOpenDeviceInfo,
+  onOpenInstructions,
   onToggleTerminal,
   showTerminal,
   onRestartSplash,
@@ -47,7 +49,18 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center gap-2.5">
+      <div className="flex flex-wrap items-center gap-2">
+        {/* Instructions / Button Guide Button */}
+        <button
+          id="header-instructions-btn"
+          onClick={onOpenInstructions}
+          className="px-2.5 py-1.5 rounded-lg bg-[#38BDF8]/10 hover:bg-[#38BDF8]/20 text-[#38BDF8] hover:text-white border border-[#38BDF8]/30 hover:border-[#38BDF8]/60 transition-all text-xs font-bold flex items-center gap-1.5 shadow-sm shadow-[#38BDF8]/10 active:scale-95"
+          title={language === 'ar' ? 'دليل وتعليمات تشغيل كل زر وخاصية' : 'Feature & Button Instructions Guide'}
+        >
+          <HelpCircle className="w-4 h-4 text-[#38BDF8]" />
+          <span>{language === 'ar' ? 'دليل الأزرار' : 'Guide'}</span>
+        </button>
+
         {/* Root Status Pill with Click to Switch/Simulate */}
         <button
           id="header-root-status-toggle-btn"

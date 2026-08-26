@@ -1,10 +1,11 @@
 import React from 'react';
-import { Settings, Cpu, Zap, HardDrive, Thermometer, Database, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Settings, Cpu, Zap, HardDrive, Thermometer, Database, CheckCircle2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { CollapsibleCard } from './CollapsibleCard';
+import { SysfsVerifiedState } from '../services/systemService';
 
 interface AdvancedSettingsProps {
   rootReady: boolean;
-  thermalThrottling: boolean;
+  verifiedState: SysfsVerifiedState;
   onOptimizeCPU: () => Promise<void>;
   onOptimizeGPU: () => Promise<void>;
   onOptimizeRAM: () => Promise<void>;
@@ -15,7 +16,7 @@ interface AdvancedSettingsProps {
 
 export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
   rootReady,
-  thermalThrottling,
+  verifiedState,
   onOptimizeCPU,
   onOptimizeGPU,
   onOptimizeRAM,
@@ -26,63 +27,91 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
   const isArabic = language === 'ar';
   const ChevronIcon = isArabic ? ChevronLeft : ChevronRight;
 
+  const isCpuPerformance = verifiedState.cpuGovernor === 'performance';
+  const isGpuLocked = verifiedState.gpuGovernor === 'performance' && verifiedState.gpuMinFreq >= 800;
+  const isThermalBypassed = !verifiedState.thermalEnabled;
+  const isIoOptimized = verifiedState.ioScheduler === 'noop';
+
   const settingsList = [
     {
       id: 'setting-cpu-opt',
-      title: isArabic ? 'تحسين CPU (وضع الأداء القصوى)' : 'CPU Performance Scaling Governor',
-      desc: isArabic ? 'تفعيل جميع أنوية المعالج بأقصى تردد تشغيلي' : 'Locks all CPU cores into "performance" governor',
+      title: isArabic ? 'حاكم المعالج CPU (Performance Governor)' : 'CPU Performance Scaling Governor',
+      desc: isArabic
+        ? `القيمة الفعلية في sysfs: ${verifiedState.cpuGovernor} على 8 أنوية`
+        : `Verified sysfs node: ${verifiedState.cpuGovernor} across 8 cores`,
       icon: Cpu,
-      accent: 'text-[#2DD4BF]',
-      action: onOptimizeCPU
+      accent: isCpuPerformance ? 'text-[#2DD4BF]' : 'text-slate-400',
+      isActive: isCpuPerformance,
+      action: onOptimizeCPU,
+      nodePath: '/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor',
+      nodeValue: verifiedState.cpuGovernor
     },
     {
       id: 'setting-gpu-opt',
-      title: isArabic ? 'تحسين GPU (قفل التردد الأقصى)' : 'Lock Maximum GPU Frequency',
-      desc: isArabic ? 'تثبيت تردد معالج الرسوميات على 825 MHz للألعاب الثقيلة' : 'Forces GPU devfreq min_freq to hardware ceiling',
+      title: isArabic ? 'تثبيت تردد كرت الشاشة Adreno (Max Clock)' : 'Lock Maximum GPU Frequency',
+      desc: isArabic
+        ? `القيمة الفعلية في sysfs: ${verifiedState.gpuGovernor} @ ${verifiedState.gpuMinFreq} MHz`
+        : `Verified devfreq node: ${verifiedState.gpuGovernor} @ ${verifiedState.gpuMinFreq} MHz`,
       icon: Zap,
-      accent: 'text-[#F4B860]',
-      action: onOptimizeGPU
+      accent: isGpuLocked ? 'text-[#F4B860]' : 'text-slate-400',
+      isActive: isGpuLocked,
+      action: onOptimizeGPU,
+      nodePath: '/sys/class/kgsl/kgsl-3d0/devfreq/min_freq',
+      nodeValue: `${verifiedState.gpuMinFreq} MHz`
     },
     {
       id: 'setting-ram-opt',
-      title: isArabic ? 'تحسين الذاكرة RAM' : 'RAM Cache Drop & Compaction',
-      desc: isArabic ? 'تفريغ الذاكرة المؤقتة vm.drop_caches=3 وتحرير المساحة' : 'Executes sync and flushes Linux pagecache/dentries',
+      title: isArabic ? 'تحرير الذاكرة وتفريغ كاش النواة (vm.drop_caches)' : 'RAM Cache Drop & Compaction',
+      desc: isArabic
+        ? 'تنفيذ sync مباشر وكتابة القيمة 3 إلى /proc/sys/vm/drop_caches'
+        : 'Direct write to /proc/sys/vm/drop_caches and vm.compact_memory',
       icon: HardDrive,
       accent: 'text-[#10B981]',
-      action: onOptimizeRAM
+      isActive: false,
+      action: onOptimizeRAM,
+      nodePath: '/proc/sys/vm/drop_caches',
+      nodeValue: 'Sync & Drop'
     },
     {
       id: 'setting-thermal-opt',
-      title: thermalThrottling
+      title: verifiedState.thermalEnabled
         ? (isArabic ? 'تعطيل كبح الحرارة (Thermal Throttling)' : 'Disable Thermal Throttling')
         : (isArabic ? 'تفعيل كبح الحرارة (Thermal Protection)' : 'Enable Thermal Protection'),
-      desc: thermalThrottling
-        ? (isArabic ? 'إيقاف خفض الأداء عند ارتفاع الحرارة للحصول على أقصى FPS' : 'Stops kernel from throttling clocks during intense gaming')
-        : (isArabic ? 'إعادة تفعيل حماية المعالج من درجات الحرارة المرتفعة' : 'Restores thermal governor to protect device hardware'),
+      desc: isArabic
+        ? `الحالة في النواة: ${verifiedState.thermalEnabled ? 'حماية نشطة (Y)' : 'كبح معطل لأقصى FPS (N)'}`
+        : `Kernel sysfs node value: ${verifiedState.thermalEnabled ? 'Enabled (Y)' : 'Disabled (N)'}`,
       icon: Thermometer,
-      accent: 'text-[#F43F5E]',
-      action: onToggleThermal
+      accent: isThermalBypassed ? 'text-[#F43F5E]' : 'text-slate-400',
+      isActive: isThermalBypassed,
+      action: onToggleThermal,
+      nodePath: '/sys/module/msm_thermal/parameters/enabled',
+      nodeValue: verifiedState.thermalEnabled ? 'Y (Active)' : 'N (Bypassed)'
     },
     {
       id: 'setting-io-opt',
-      title: isArabic ? 'تحسين سرعة التخزين (I/O Scheduler)' : 'Tune Storage I/O Scheduler',
-      desc: isArabic ? 'تغيير جدولة القراءة/الكتابة لتقليل بطء تحميل الألعاب' : 'Sets noop/deadline scheduler on internal flash memory',
+      title: isArabic ? 'جدولة التخزين (I/O Scheduler: noop)' : 'Tune Storage I/O Scheduler',
+      desc: isArabic
+        ? `القيمة الحالية في sysfs: ${verifiedState.ioScheduler}`
+        : `Verified sysfs node: [${verifiedState.ioScheduler}]`,
       icon: Database,
-      accent: 'text-indigo-400',
-      action: onOptimizeIO
+      accent: isIoOptimized ? 'text-indigo-400' : 'text-slate-400',
+      isActive: isIoOptimized,
+      action: onOptimizeIO,
+      nodePath: '/sys/block/mmcblk0/queue/scheduler',
+      nodeValue: verifiedState.ioScheduler
     }
   ];
 
   return (
     <CollapsibleCard
       id="advanced-settings-section"
-      title={isArabic ? 'إعدادات النواة والعتاد المتقدمة' : 'Advanced Kernel & Hardware Controls'}
-      subtitle={isArabic ? 'أوامر مباشرة للنواة وذاكرة الوصول العشوائي ومتحكمات Adreno' : 'Direct sysfs node switches for memory, clocks, and thermal management'}
+      title={isArabic ? 'إعدادات النواة والعتاد المباشرة (Scene Style Sysfs)' : 'Direct Sysfs / Procfs Hardware Controls'}
+      subtitle={isArabic ? 'كتابة وقراءة مباشرة لملفات العتاد مع التحقق من التطابق' : 'Direct node writes with verified read-back status'}
       icon={Settings}
       defaultExpanded={false}
       accentColor="#10B981"
     >
-      <div className="space-y-2">
+      <div className="space-y-2.5">
         {settingsList.map((item) => {
           const ItemIcon = item.icon;
           return (
@@ -91,18 +120,35 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
               id={item.id}
               disabled={!rootReady}
               onClick={() => item.action()}
-              className="w-full p-3 rounded-xl bg-[#09111D] border border-slate-800 hover:border-slate-700 hover:bg-[#16283B] transition-all flex items-center justify-between text-start disabled:opacity-40 disabled:cursor-not-allowed group"
+              className={`w-full p-3 rounded-xl border transition-all flex items-center justify-between text-start disabled:opacity-40 disabled:cursor-not-allowed group ${
+                item.isActive
+                  ? 'bg-[#111E2C] border-cyan-500/40 shadow-sm'
+                  : 'bg-[#09111D] border-slate-800 hover:border-slate-700 hover:bg-[#16283B]'
+              }`}
             >
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-slate-800/80 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                  <ItemIcon className={`w-4 h-4 ${item.accent}`} />
+                <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 transition-transform ${
+                  item.isActive ? 'bg-cyan-500/20' : 'bg-slate-800/80 group-hover:scale-105'
+                }`}>
+                  <ItemIcon className={`w-5 h-5 ${item.accent}`} />
                 </div>
                 <div>
-                  <div className="text-xs md:text-sm font-bold text-white group-hover:text-[#2DD4BF] transition-colors">
-                    {item.title}
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs md:text-sm font-bold text-white group-hover:text-[#2DD4BF] transition-colors">
+                      {item.title}
+                    </span>
+                    {item.isActive && (
+                      <span className="inline-flex items-center gap-1 text-[9px] font-mono px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                        <CheckCircle2 className="w-2.5 h-2.5" />
+                        {isArabic ? 'مطابق لـ Sysfs' : 'Sysfs Verified'}
+                      </span>
+                    )}
                   </div>
                   <div className="text-[10px] text-[#91A5B8]">
                     {item.desc}
+                  </div>
+                  <div className="text-[9px] font-mono text-slate-500 mt-0.5">
+                    node: {item.nodePath} = <span className="text-cyan-400 font-bold">{item.nodeValue}</span>
                   </div>
                 </div>
               </div>
